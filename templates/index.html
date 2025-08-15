@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Care4Heart - Predict Your Heart Risk</title>
+    <link rel="stylesheet" href="static\styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Fixed Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-icon">💙</span>
+                <span class="logo-text">Care4Heart</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home">Home</a>
+                <a href="#assessment">Assessment</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="gradient-orb orb-3"></div>
+        <div class="floating-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+
+    <!-- Homepage Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span class="title-main">Care4Heart</span>
+                <span class="title-sub">Your heart, decoded in seconds.<span>
+            </h1>
+            <p class="hero-description">
+                Is your heart trying to tell you something?
+                
+               Care4Heart helps you decode the signs using data-driven predictions.
+               One click. Real answers. No waiting.
+            </p>
+            <a href="#assessment" class="cta-button">
+                <span class="button-text">Start Assessment</span>
+                <span class="button-icon">❤</span>
+            </a>
+        </div>
+        <div class="hero-visual">
+            <div class="heart-animation">
+                <div class="heartbeat"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Section -->
+    <section id="assessment" class="assessment-section">
+        <div class="assessment-container">
+            <div class="assessment-header">
+                <h2>Health Assessment</h2>
+                <p>Please provide your health information for accurate risk prediction</p>
+            </div>
+
+            <form class="assessment-form" id="healthForm" action="/predict" method="POST">
+                <!-- Demographics -->
+                <div class="form-group">
+                    <h3 class="section-title">
+                        <span class="section-icon">🧑</span>
+                        Demographics
+                    </h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="age">Age</label>
+                            <input type="number" id="age" name="age" min="18" max="120" required>
+                            <small class="input-hint">Age range: 18-120 years</small>
+                        </div>
+                        <div class="input-group">
+                            <label>Sex</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="sex" value="male" required>
+                                    <span class="radio-custom"></span>
+                                    Male
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="sex" value="female" required>
+                                    <span class="radio-custom"></span>
+                                    Female
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="education">Education Level</label>
+                            <select id="education" name="education" required>
+                                <option value="">Select level</option>
+                                <option value="1">Elementary</option>
+                                <option value="2">High School</option>
+                                <option value="3">College</option>
+                                <option value="4">Graduate</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lifestyle -->
+                <div class="form-group">
+                    <h3 class="section-title">
+                        <span class="section-icon">🚬</span>
+                        Lifestyle
+                    </h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Do you smoke?</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="is_smoking" value="yes" required>
+                                    <span class="radio-custom"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="is_smoking" value="no" required>
+                                    <span class="radio-custom"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label for="cigsPerDay">Cigarettes per day</label>
+                            <input type="number" id="cigsPerDay" name="cigsPerDay" min="0" max="100" oninput="updateSmokingIntensity()">
+                            <small class="input-hint">Enter 0-100 cigarettes per day</small>
+                        </div>
+                        <div class="input-group">
+                            <label for="smoking_intensity">Smoking Intensity</label>
+                            <select id="smoking_intensity" name="smoking_intensity" readonly>
+                                <option value="non-smoker">Non-Smoker</option>
+                                <option value="light">Light Smoker</option>
+                                <option value="moderate">Moderate Smoker</option>
+                                <option value="heavy">Heavy Smoker</option>
+                            </select>
+                            <small class="input-hint">Auto-calculated based on cigarettes per day</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medical History -->
+                <div class="form-group">
+                    <h3 class="section-title">
+                        <span class="section-icon">🩺</span>
+                        Medical History
+                    </h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Diabetes</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="diabetes" value="yes" required>
+                                    <span class="radio-custom"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="diabetes" value="no" required>
+                                    <span class="radio-custom"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Blood Pressure Medication</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="BPMeds" value="yes" required>
+                                    <span class="radio-custom"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="BPMeds" value="no" required>
+                                    <span class="radio-custom"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Hypertension</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="prevalentHyp" value="yes" required>
+                                    <span class="radio-custom"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="prevalentHyp" value="no" required>
+                                    <span class="radio-custom"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>Previous Stroke</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="prevalentStroke" value="yes" required>
+                                    <span class="radio-custom"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="prevalentStroke" value="no" required>
+                                    <span class="radio-custom"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vitals -->
+                <div class="form-group">
+                    <h3 class="section-title">
+                        <span class="section-icon">💓</span>
+                        Vitals
+                    </h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="sysBP">Systolic BP (mmHg)</label>
+                            <input type="number" id="sysBP" name="sysBP" min="70" max="250" required>
+                            <small class="input-hint">Normal range: 70-250 mmHg</small>
+                        </div>
+                        <div class="input-group">
+                            <label for="diaBP">Diastolic BP (mmHg)</label>
+                            <input type="number" id="diaBP" name="diaBP" min="40" max="150" required>
+                            <small class="input-hint">Normal range: 40-150 mmHg</small>
+                        </div>
+                        <div class="input-group">
+                            <label for="pulse_pressure">Pulse Pressure</label>
+                            <input type="number" id="pulse_pressure" name="pulse_pressure" min="20" max="150" readonly>
+                            <small class="input-hint">Auto-calculated (Systolic - Diastolic)</small>
+                        </div>
+                    </div>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="heartRate">Heart Rate (BPM)</label>
+                            <input type="number" id="heartRate" name="heartRate" min="40" max="200" required>
+                            <small class="input-hint">Normal range: 40-200 BPM</small>
+                        </div>
+                        <div class="input-group">
+                            <label for="BMI">BMI</label>
+                            <input type="number" id="BMI" name="BMI" min="10" max="50" step="0.1" required>
+                            <small class="input-hint">Normal range: 10-50 kg/m²</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lab Results -->
+                <div class="form-group">
+                    <h3 class="section-title">
+                        <span class="section-icon">🧪</span>
+                        Lab Results
+                    </h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label for="glucose">Glucose (mg/dL)</label>
+                            <input type="number" id="glucose" name="glucose" min="50" max="400" required oninput="updateGlucoseStatus()">
+                            <small class="input-hint">Normal range: 50-400 mg/dL</small>
+                        </div>
+                        <div class="input-group">
+                            <label for="totChol">Total Cholesterol (mg/dL)</label>
+                            <input type="number" id="totChol" name="totChol" min="100" max="400" required>
+                            <small class="input-hint">Normal range: 100-400 mg/dL</small>
+                        </div>
+                        <div class="input-group">
+                            <label for="glucose_status">Glucose Status</label>
+                            <select id="glucose_status" name="glucose_status" required>
+                                <option value="">Select status</option>
+                                <option value="normal">Normal</option>
+                                <option value="pre-diabetes">Pre-diabetes</option>
+                                <option value="diabetes">Diabetes</option>
+                            </select>
+                            <small class="input-hint">Auto-calculated based on glucose value</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other Indicators -->
+                <div class="form-group">
+                    <h3 class="section-title">
+                        <span class="section-icon">🩹</span>
+                        Other Indicators
+                    </h3>
+                    <div class="input-row">
+                        <div class="input-group">
+                            <label>Obesity</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="is_obese" value="yes" required>
+                                    <span class="radio-custom"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="is_obese" value="no" required>
+                                    <span class="radio-custom"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label>High Cholesterol</label>
+                            <div class="radio-group">
+                                <label class="radio-label">
+                                    <input type="radio" name="high_cholesterol" value="yes" required>
+                                    <span class="radio-custom"></span>
+                                    Yes
+                                </label>
+                                <label class="radio-label">
+                                    <input type="radio" name="high_cholesterol" value="no" required>
+                                    <span class="radio-custom"></span>
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="submit-container">
+                    <button type="submit" class="submit-button" id="analyzeBtn">
+                        <span class="submit-text">Analyze Risk</span>
+                        <span class="submit-icon">🔍</span>
+                    </button>
+                </div>
+            </form>
+
+            <!-- Loading Animation -->
+            <div class="loading-container">
+                <div class="loading-spinner">
+                    <div class="heart-loader">💖</div>
+                </div>
+                <p class="loading-text">Analyzing your health data...</p>
+            </div>
+
+            <!-- Results -->
+            <div class="results-container" id="resultsContainer" style="display: none;">
+                {% if prediction_text %}
+                <div class="result-card {{ result_type }}">
+                    <div class="result-icon">
+                        {% if result_type == 'at-risk' %}⚠{% elif result_type == 'moderate-risk' %}⚠{% else %}✅{% endif %}
+                    </div>
+                    <h3>{{ prediction_text }}</h3>
+                    <p>{{ result_message }}</p>
+                    {% if risk_percent is defined %}
+                    <p style="font-weight: bold; font-size: 1.2em; color: #0077b6;">Risk Score: {{ risk_percent }}%</p>
+                    {% endif %}
+                    <div class="result-actions">
+                        {% if result_type == 'at-risk' %}
+                        <button class="result-button primary" id="consultDocBtn">Consult Doctor</button>
+                        <button class="result-button secondary" id="learnMoreBtn">Learn More</button>
+                        {% elif result_type == 'moderate-risk' %}
+                        <button class="result-button primary" id="monitorHealthBtn">Monitor Health</button>
+                        <button class="result-button secondary" id="lifestyleTipsBtn">Lifestyle Tips</button>
+                        {% else %}
+                        <button class="result-button primary" id="maintainHealthBtn">Maintain Health</button>
+                        <button class="result-button secondary" id="shareResultsBtn">Share Results</button>
+                        {% endif %}
+                    </div>
+                </div>
+                <div id="result-action-message" style="text-align:center; margin-top:1.5rem; font-size:1.1em; color:#0077b6;"></div>
+                {% endif %}
+            </div>
+
+            <!-- Error Message -->
+            {% if error_message %}
+            <div class="error-container">
+                <div class="error-card">
+                    <div class="error-icon">❌</div>
+                    <h3>Error</h3>
+                    <p>{{ error_message }}</p>
+                    <button class="error-button" onclick="hideError()">Try Again</button>
+                </div>
+            </div>
+            {% endif %}
+                <div id="tips-section-anchor"></div>
+                <div id="tips-section" style="display:none; margin-top:2rem;">
+                    {% if tips_data %}
+                    <div class="tips-card" style="max-width:700px;margin:0 auto;padding:2.5rem 2rem 2rem 2rem;background:#f8fafd;border-radius:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                        <h3 style="color:#0077b6;text-align:center;margin-bottom:2rem;font-size:2rem;font-weight:700;letter-spacing:0.5px;">{{ tips_data.title }}</h3>
+                        <ul style="list-style:none;padding:0;">
+                        {% for tip in tips_data.tips %}
+                            <li style="display:flex;align-items:flex-start;margin-bottom:2rem;gap:1.5rem;">
+                                <span style="font-size:2.5rem;min-width:2.5rem;line-height:1;">{{ tip.icon }}</span>
+                                <div>
+                                    <strong style="font-size:1.2em;color:#222;">{{ tip.title }}</strong><br>
+                                    <span style="color:#444;font-size:1.08em;">{{ tip.description }}</span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+                <div id="monitor-section-anchor"></div>
+                <div id="monitor-section" style="display:none; margin-top:2rem;">
+                    <div class="tips-card" style="max-width:700px;margin:0 auto;padding:2.5rem 2rem 2rem 2rem;background:#f8fafd;border-radius:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                        <h3 style="color:#0077b6;text-align:center;margin-bottom:2rem;font-size:2rem;font-weight:700;letter-spacing:0.5px;">Monitor Your Health</h3>
+                        <ul style="list-style:none;padding:0;">
+                            <li style="display:flex;align-items:flex-start;margin-bottom:2rem;gap:1.5rem;">
+                                <span style="font-size:2.5rem;min-width:2.5rem;line-height:1;">📅</span>
+                                <div>
+                                    <strong style="font-size:1.2em;color:#222;">Regular Check-ups</strong><br>
+                                    <span style="color:#444;font-size:1.08em;">Schedule regular visits with your healthcare provider to monitor your health status and risk factors.</span>
+                                </div>
+                            </li>
+                            <li style="display:flex;align-items:flex-start;margin-bottom:2rem;gap:1.5rem;">
+                                <span style="font-size:2.5rem;min-width:2.5rem;line-height:1;">📊</span>
+                                <div>
+                                    <strong style="font-size:1.2em;color:#222;">Track Key Metrics</strong><br>
+                                    <span style="color:#444;font-size:1.08em;">Monitor your blood pressure, cholesterol, and blood sugar levels regularly.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="lifestyle-section-anchor"></div>
+                <div id="lifestyle-section" style="display:none; margin-top:2rem;">
+                    <div class="tips-card" style="max-width:700px;margin:0 auto;padding:2.5rem 2rem 2rem 2rem;background:#f8fafd;border-radius:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                        <h3 style="color:#0077b6;text-align:center;margin-bottom:2rem;font-size:2rem;font-weight:700;letter-spacing:0.5px;">Lifestyle Tips</h3>
+                        <ul style="list-style:none;padding:0;">
+                            <li style="display:flex;align-items:flex-start;margin-bottom:2rem;gap:1.5rem;">
+                                <span style="font-size:2.5rem;min-width:2.5rem;line-height:1;">🥦</span>
+                                <div>
+                                    <strong style="font-size:1.2em;color:#222;">Eat More Vegetables</strong><br>
+                                    <span style="color:#444;font-size:1.08em;">Incorporate a variety of vegetables into your meals for better heart health.</span>
+                                </div>
+                            </li>
+                            <li style="display:flex;align-items:flex-start;margin-bottom:2rem;gap:1.5rem;">
+                                <span style="font-size:2.5rem;min-width:2.5rem;line-height:1;">🚶‍♂</span>
+                                <div>
+                                    <strong style="font-size:1.2em;color:#222;">Stay Active</strong><br>
+                                    <span style="color:#444;font-size:1.08em;">Aim for at least 30 minutes of physical activity most days of the week.</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div id="doctors-section-anchor"></div>
+                <div id="doctors-section" style="display:none; margin-top:2rem;">
+                    {% if doctors_data %}
+                    <div class="tips-card" style="max-width:700px;margin:0 auto;padding:2.5rem 2rem 2rem 2rem;background:#f8fafd;border-radius:1.5rem;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+                        <h3 style="color:#0077b6;text-align:center;margin-bottom:1.5rem;font-size:2rem;font-weight:700;letter-spacing:0.5px;">{{ doctors_data.title }}</h3>
+                        <p style="text-align:center;color:#666;font-size:1.1em;margin-bottom:2rem;">{{ doctors_data.subtitle }}</p>
+                        {% if doctors_data.doctors and doctors_data.doctors|length > 0 %}
+                        <ul style="list-style:none;padding:0;">
+                        {% for doc in doctors_data.doctors %}
+                            <li style="margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #e0e6ed;display:flex;align-items:flex-start;gap:1.5rem;background:#fff;border-radius:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.04);padding:1.2rem 1rem;">
+                                <span style="font-size:2.5rem;min-width:2.5rem;line-height:1;">👨‍⚕</span>
+                                <div>
+                                    <strong style="font-size:1.2em;color:#222;">{{ doc.name }}</strong> <span style="color:#0077b6;">({{ doc.specialty }})</span><br>
+                                    <span style="color:#444;font-size:1.08em;">Experience: {{ doc.experience }} | {{ doc.location }}</span><br>
+                                    <span style="color:#444;font-size:1.08em;">Phone: {{ doc.phone }} | Rating: {{ doc.rating }} | {{ doc.availability }}</span>
+                                </div>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                        {% else %}
+                        <div style="text-align:center;color:#b00;font-size:1.1em;">No doctor recommendations found for your risk level.</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+        </div>
+    </section>
+
+    <script>
+        // Show results if prediction exists
+        document.addEventListener('DOMContentLoaded', function() {
+            var resultsContainer = document.getElementById('resultsContainer');
+            if (resultsContainer && resultsContainer.innerHTML.trim() !== '') {
+                resultsContainer.style.display = 'block';
+                // Scroll to results
+                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            }
+
+            // Button handlers for result actions
+            var actionMsg = document.getElementById('result-action-message');
+            var consultDocBtn = document.getElementById('consultDocBtn');
+            var learnMoreBtn = document.getElementById('learnMoreBtn');
+            var maintainHealthBtn = document.getElementById('maintainHealthBtn');
+            var monitorHealthBtn = document.getElementById('monitorHealthBtn');
+            var lifestyleTipsBtn = document.getElementById('lifestyleTipsBtn');
+            var shareResultsBtn = document.getElementById('shareResultsBtn');
+
+            if (consultDocBtn) consultDocBtn.onclick = function() {
+                actionMsg.textContent = 'Consult a doctor for a personalized assessment and next steps.';
+            };
+            if (learnMoreBtn) learnMoreBtn.onclick = function() {
+                actionMsg.textContent = 'Learn more about cardiovascular risk factors and prevention tips below.';
+            };
+            function scrollToSection(sectionId) {
+                var anchor = document.getElementById(sectionId + '-anchor');
+                if (anchor) {
+                    anchor.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+            if (maintainHealthBtn) maintainHealthBtn.onclick = function() {
+                actionMsg.textContent = '';
+                document.getElementById('tips-section').style.display = 'block';
+                document.getElementById('doctors-section').style.display = 'none';
+                document.getElementById('monitor-section').style.display = 'none';
+                document.getElementById('lifestyle-section').style.display = 'none';
+                scrollToSection('tips-section');
+            };
+            if (learnMoreBtn) learnMoreBtn.onclick = function() {
+                actionMsg.textContent = '';
+                document.getElementById('tips-section').style.display = 'block';
+                document.getElementById('doctors-section').style.display = 'none';
+                document.getElementById('monitor-section').style.display = 'none';
+                document.getElementById('lifestyle-section').style.display = 'none';
+                scrollToSection('tips-section');
+            };
+            if (consultDocBtn) consultDocBtn.onclick = function() {
+                actionMsg.textContent = '';
+                document.getElementById('tips-section').style.display = 'none';
+                document.getElementById('doctors-section').style.display = 'block';
+                document.getElementById('monitor-section').style.display = 'none';
+                document.getElementById('lifestyle-section').style.display = 'none';
+                scrollToSection('doctors-section');
+            };
+            if (monitorHealthBtn) monitorHealthBtn.onclick = function() {
+                actionMsg.textContent = 'Monitor your health regularly and follow up with your healthcare provider.';
+            };
+            if (lifestyleTipsBtn) lifestyleTipsBtn.onclick = function() {
+                actionMsg.textContent = 'Explore lifestyle tips to reduce your risk and improve your heart health.';
+            };
+            if (shareResultsBtn) shareResultsBtn.onclick = function() {
+                actionMsg.textContent = 'You can share your results with your doctor or loved ones for support!';
+            };
+        });
+
+        // Form submission handling
+        document.getElementById('healthForm').addEventListener('submit', function(e) {
+            // Form validation
+            const age = parseInt(document.getElementById('age').value);
+            const sysBP = parseInt(document.getElementById('sysBP').value);
+            const diaBP = parseInt(document.getElementById('diaBP').value);
+            const heartRate = parseInt(document.getElementById('heartRate').value);
+            const BMI = parseFloat(document.getElementById('BMI').value);
+            const glucose = parseInt(document.getElementById('glucose').value);
+            const totChol = parseInt(document.getElementById('totChol').value);
+
+            let isValid = true;
+            let errorMessage = '';
+
+            if (age < 18 || age > 120) {
+                errorMessage += 'Age must be between 18 and 120 years.\n';
+                isValid = false;
+            }
+            if (sysBP < 70 || sysBP > 250) {
+                errorMessage += 'Systolic BP must be between 70 and 250 mmHg.\n';
+                isValid = false;
+            }
+            if (diaBP < 40 || diaBP > 150) {
+                errorMessage += 'Diastolic BP must be between 40 and 150 mmHg.\n';
+                isValid = false;
+            }
+            if (heartRate < 40 || heartRate > 200) {
+                errorMessage += 'Heart rate must be between 40 and 200 BPM.\n';
+                isValid = false;
+            }
+            if (BMI < 10 || BMI > 50) {
+                errorMessage += 'BMI must be between 10 and 50 kg/m².\n';
+                isValid = false;
+            }
+            if (glucose < 50 || glucose > 400) {
+                errorMessage += 'Glucose must be between 50 and 400 mg/dL.\n';
+                isValid = false;
+            }
+            if (totChol < 100 || totChol > 400) {
+                errorMessage += 'Total cholesterol must be between 100 and 400 mg/dL.\n';
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please correct the following errors:\n' + errorMessage);
+                return false;
+            }
+
+            // Show loading animation
+            document.querySelector('.loading-container').style.display = 'flex';
+            document.getElementById('resultsContainer').style.display = 'none';
+            
+            // Hide any existing error messages
+            const errorContainer = document.querySelector('.error-container');
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+            }
+        });
+
+        // Hide error function
+        function hideError() {
+            const errorContainer = document.querySelector('.error-container');
+            if (errorContainer) {
+                errorContainer.style.display = 'none';
+            }
+        }
+
+        // Auto-calculate pulse pressure
+        document.getElementById('sysBP').addEventListener('input', calculatePulsePressure);
+        document.getElementById('diaBP').addEventListener('input', calculatePulsePressure);
+
+        function calculatePulsePressure() {
+            const sysBP = parseFloat(document.getElementById('sysBP').value) || 0;
+            const diaBP = parseFloat(document.getElementById('diaBP').value) || 0;
+            const pulsePressure = sysBP - diaBP;
+            
+            if (pulsePressure > 0) {
+                document.getElementById('pulse_pressure').value = pulsePressure;
+            }
+        }
+
+        // Auto-calculate smoking intensity
+        function updateSmokingIntensity() {
+            const cigsPerDay = parseFloat(document.getElementById('cigsPerDay').value) || 0;
+            const smokingIntensitySelect = document.getElementById('smoking_intensity');
+
+            if (cigsPerDay === 0) {
+                smokingIntensitySelect.value = 'non-smoker';
+            } else if (cigsPerDay <= 10) {
+                smokingIntensitySelect.value = 'light';
+            } else if (cigsPerDay <= 20) {
+                smokingIntensitySelect.value = 'moderate';
+            } else {
+                smokingIntensitySelect.value = 'heavy';
+            }
+        }
+
+        // Handle smoking radio button changes
+        document.querySelectorAll('input[name="is_smoking"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const cigsPerDayInput = document.getElementById('cigsPerDay');
+                if (this.value === 'no') {
+                    // If "No" is selected, set cigarettes per day to 0
+                    cigsPerDayInput.value = '0';
+                    updateSmokingIntensity();
+                }
+            });
+        });
+
+        // Auto-calculate glucose status
+        document.getElementById('glucose').addEventListener('input', updateGlucoseStatus);
+
+        function updateGlucoseStatus() {
+            const glucose = parseFloat(document.getElementById('glucose').value) || 0;
+            const glucoseStatusSelect = document.getElementById('glucose_status');
+
+            if (glucose < 100) {
+                glucoseStatusSelect.value = 'normal';
+            } else if (glucose < 126) {
+                glucoseStatusSelect.value = 'pre-diabetes';
+            } else {
+                glucoseStatusSelect.value = 'diabetes';
+            }
+        }
+
+        // Auto-calculate obesity based on BMI
+        document.getElementById('BMI').addEventListener('input', updateObesity);
+
+        function updateObesity() {
+            const bmi = parseFloat(document.getElementById('BMI').value) || 0;
+            const obesityYes = document.querySelector('input[name="is_obese"][value="yes"]');
+            const obesityNo = document.querySelector('input[name="is_obese"][value="no"]');
+
+            if (bmi >= 30) {
+                obesityYes.checked = true;
+            } else {
+                obesityNo.checked = true;
+            }
+        }
+
+        // Auto-calculate high cholesterol based on total cholesterol
+        document.getElementById('totChol').addEventListener('input', updateHighCholesterol);
+
+        function updateHighCholesterol() {
+            const totChol = parseFloat(document.getElementById('totChol').value) || 0;
+            const highCholYes = document.querySelector('input[name="high_cholesterol"][value="yes"]');
+            const highCholNo = document.querySelector('input[name="high_cholesterol"][value="no"]');
+
+            if (totChol >= 240) {
+                highCholYes.checked = true;
+            } else {
+                highCholNo.checked = true;
+            }
+        }
+
+        document.getElementById('learnMoreBtn').onclick = function() {
+            window.location.href = '/health-tips?risk_level=moderate';
+        };
+        document.getElementById('consultDocBtn').onclick = function() {
+            window.location.href = '/doctor-recommendations?risk_level=moderate';
+        };
+        document.getElementById('maintainHealthBtn').onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+            alert('Keep up the good work! Maintain your healthy lifestyle.');
+        };
+    </script>
+</body>
+</html>
